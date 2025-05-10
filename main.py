@@ -6,7 +6,7 @@ from google.cloud import pubsub_v1
 
 # ─── CONFIG ───
 PROJECT_ID    = "avian-cosmos-458703-g3"
-TOPIC_ID      = "Seminar-List-Automation"
+TOPIC_ID      = "seminar"
 SLACK_WEBHOOK = "https://webhook.site/5297a000-62ea-435d-8530-745122adb05b"
 
 publisher  = pubsub_v1.PublisherClient()
