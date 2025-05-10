@@ -13,7 +13,6 @@ publisher  = pubsub_v1.PublisherClient()
 TOPIC_PATH = publisher.topic_path(PROJECT_ID, TOPIC_ID)
 
 # ─── FORM ID TO BRAND MAPPING ───
-# ─── FORM ID TO BRAND MAPPING ───
 FORM_ID_TO_BRAND = {
     "681ea1dd75c61440f40537c0": "ECE",
     "681e9dc9d9b9d5e9e10682e6": "TPRA",
