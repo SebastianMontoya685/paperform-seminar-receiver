@@ -1,25 +1,14 @@
 steps:
-# Step 1: Install dependencies & build container with Buildpacks
-- name: 'gcr.io/buildpacks/builder:v1'
-  args: [
-    'pack',
-    'build',
-    'gcr.io/$PROJECT_ID/paperform-seminar-receiver',
-    '--path', '.',
-    '--builder', 'gcr.io/buildpacks/builder:v1',
-    '--env', 'GOOGLE_FUNCTION_TARGET=receive_and_publish',
-    '--env', 'GOOGLE_FUNCTION_SIGNATURE_TYPE=http'
-  ]
-
-# Step 2: Deploy the built container to Cloud Run
+# Build & deploy directly using Google Cloud's gcloud CLI with buildpacks
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  args: [
-    'gcloud',
-    'run',
-    'deploy',
-    'paperform-seminar-receiver',
-    '--image', 'gcr.io/$PROJECT_ID/paperform-seminar-receiver',
-    '--platform', 'managed',
-    '--region', 'us-central1',
-    '--allow-unauthenticated'
-  ]
+  entrypoint: 'gcloud'
+  args:
+    [
+      'run', 'deploy', 'paperform-seminar-receiver',
+      '--source', '.',
+      '--entry-point', 'receive_and_publish',
+      '--runtime', 'python311',
+      '--region', 'us-central1',
+      '--project', 'avian-cosmos-458703-g3',
+      '--allow-unauthenticated'
+    ]
