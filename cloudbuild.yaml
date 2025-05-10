@@ -1,7 +1,9 @@
+options:
+  logging: CLOUD_LOGGING_ONLY
+
 steps:
-# Build & deploy directly using Google Cloud's gcloud CLI with buildpacks
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: 'gcloud'
+  entrypoint: gcloud
   args:
     [
       'run', 'deploy', 'paperform-seminar-receiver',
