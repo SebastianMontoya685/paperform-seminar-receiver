@@ -2,20 +2,19 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 steps:
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: bash
-  args:
-    - -c
-    - |
-      pip install functions-framework
-      gcloud builds submit --tag gcr.io/$PROJECT_ID/paperform-seminar-receiver .
+- name: 'gcr.io/buildpacks/builder'
+  args: [
+    'build', 'gcr.io/$PROJECT_ID/paperform-seminar-receiver',
+    '--builder=gcr.io/buildpacks/builder:v1',
+    '--path=.',
+    '--env', 'GOOGLE_FUNCTION_TARGET=receive_and_publish'
+  ]
 
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  args:
-    [
-      'gcloud', 'run', 'deploy', 'paperform-seminar-receiver',
-      '--image', 'gcr.io/$PROJECT_ID/paperform-seminar-receiver',
-      '--region', 'us-central1',
-      '--platform', 'managed',
-      '--allow-unauthenticated'
-    ]
+  args: [
+    'gcloud', 'run', 'deploy', 'paperform-seminar-receiver',
+    '--image', 'gcr.io/$PROJECT_ID/paperform-seminar-receiver',
+    '--region', 'us-central1',
+    '--platform', 'managed',
+    '--allow-unauthenticated'
+  ]
