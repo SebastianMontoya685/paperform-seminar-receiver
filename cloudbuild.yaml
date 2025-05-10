@@ -2,11 +2,10 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 steps:
-- name: 'gcr.io/buildpacks/builder'
+- name: 'gcr.io/k8s-skaffold/pack'
   args: [
     'build', 'gcr.io/$PROJECT_ID/paperform-seminar-receiver',
-    '--builder=gcr.io/buildpacks/builder:v1',
-    '--path=.',
+    '--builder', 'gcr.io/buildpacks/builder:v1',
     '--env', 'GOOGLE_FUNCTION_TARGET=receive_and_publish'
   ]
 
