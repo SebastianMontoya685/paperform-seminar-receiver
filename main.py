@@ -1,17 +1,18 @@
-# import os
+import os
 import json
-# import base64
-# import requests
+import base64
+import requests
 from google.cloud import pubsub_v1
-#Testing it again and again and again
+# lets do this!!
 # ─── CONFIG ───
 PROJECT_ID    = "avian-cosmos-458703-g3"
-TOPIC_ID      = "seminar"
+TOPIC_ID      = "Seminar-List-Automation"
 SLACK_WEBHOOK = "https://webhook.site/5297a000-62ea-435d-8530-745122adb05b"
 
 publisher  = pubsub_v1.PublisherClient()
 TOPIC_PATH = publisher.topic_path(PROJECT_ID, TOPIC_ID)
 
+# ─── FORM ID TO BRAND MAPPING ───
 # ─── FORM ID TO BRAND MAPPING ───
 FORM_ID_TO_BRAND = {
     "681ea1dd75c61440f40537c0": "ECE",
