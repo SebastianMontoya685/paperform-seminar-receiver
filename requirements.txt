@@ -27,8 +27,8 @@ zipp==3.21.0
 # add for Cloud Run (choose one)
 functions-framework>=3.0.0
 # —or—
-Flask>=2.3.0
-gunicorn>=20.1.0
+# Flask>=2.3.0
+# gunicorn>=20.1.0
 
 # Slack integration
 slack-sdk>=3.20.0
