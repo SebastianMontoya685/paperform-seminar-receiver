@@ -24,11 +24,4 @@ jobs:
         with:
           project_id: avian-cosmos-458703-g3
 
-      - name: Deploy to Cloud Run
-        run: |
-          gcloud run deploy seminar-receiver \
-            --source . \
-            --entry-point receive_and_publish \
-            --region us-central1 \
-            --runtime python311 \
-            --allow-unauthenticated
+      
