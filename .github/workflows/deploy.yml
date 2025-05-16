@@ -3,11 +3,11 @@ name: Deploy to Cloud Run
 on:
   push:
     branches:
-      - main
+      - main  # Or whichever branch you want to trigger deployment
 
 jobs:
   deploy:
-    name: Deploy to Cloud Run
+    name: Deploy seminar-receiver
     runs-on: ubuntu-latest
 
     steps:
@@ -23,7 +23,7 @@ jobs:
 
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy seminar-transformer \
+          gcloud run deploy seminar-receiver \
             --source . \
             --entry-point receive_and_publish \
             --region us-central1 \
