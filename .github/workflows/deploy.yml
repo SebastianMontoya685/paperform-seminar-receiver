@@ -1,0 +1,31 @@
+name: Deploy to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to Cloud Run
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      - name: Set up Google Cloud CLI
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: avian-cosmos-458703-g3
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+          export_default_credentials: true
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy seminar-transformer \
+            --source . \
+            --entry-point receive_and_publish \
+            --region us-central1 \
+            --runtime python311 \
+            --allow-unauthenticated
