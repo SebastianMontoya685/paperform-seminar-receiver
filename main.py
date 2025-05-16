@@ -1,9 +1,12 @@
+from flask import Flask, request, jsonify
 import os
 import json
 import base64
 import requests
 from google.cloud import pubsub_v1
-# lets do this again and again and again
+
+app = Flask(__name__)
+
 # ─── CONFIG ───
 PROJECT_ID    = "avian-cosmos-458703-g3"
 TOPIC_ID      = "Seminar-List-Automation"
@@ -13,7 +16,6 @@ publisher  = pubsub_v1.PublisherClient()
 TOPIC_PATH = publisher.topic_path(PROJECT_ID, TOPIC_ID)
 
 # ─── FORM ID TO BRAND MAPPING ───
-# ─── FORM ID TO BRAND MAPPING ───
 FORM_ID_TO_BRAND = {
     "681ea1dd75c61440f40537c0": "ECE",
     "681e9dc9d9b9d5e9e10682e6": "TPRA",
@@ -22,9 +24,8 @@ FORM_ID_TO_BRAND = {
     "681ea9e8939646b8df09df67": "JPI"
 }
 
-# Extract brand based on form ID
-
-def receive_and_publish(request):
+@app.route("/", methods=["POST"])
+def receive_and_publish():
     if request.method != "POST":
         return ("Only POST allowed", 405)
 
@@ -32,7 +33,6 @@ def receive_and_publish(request):
     if not data:
         return ("Invalid JSON", 400)
 
-    # Extract values from form data
     def extract_value(field_title):
         return next(
             (item.get("value") for item in data.get("data", [])
@@ -44,14 +44,13 @@ def receive_and_publish(request):
     company     = extract_value("Company")
     event_name  = extract_value("INPUT: Event Name")
     event_date  = extract_value("INPUT: Event Date")
-    form_id = data.get("form_id", "").strip()
-    brand = FORM_ID_TO_BRAND.get(form_id, "UNKNOWN")
+    form_id     = data.get("form_id", "").strip()
+    brand       = FORM_ID_TO_BRAND.get(form_id, "UNKNOWN")
     email       = extract_value("Email")
 
     if not name or not form_id:
         return ("Missing name or form_id", 400)
 
-    # Construct payload
     payload = json.dumps({
         "name": name,
         "brand": brand,
@@ -68,3 +67,7 @@ def receive_and_publish(request):
         return (f"Publish error: {e}", 500)
 
     return ("Accepted", 202)
+
+# For local testing
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
