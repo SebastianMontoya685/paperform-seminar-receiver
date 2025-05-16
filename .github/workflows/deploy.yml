@@ -28,8 +28,6 @@ jobs:
         run: |
           gcloud run deploy seminar-receiver \
             --source . \
-            --entry-point receive_and_publish \
-            --runtime python311 \
             --region us-central1 \
             --project avian-cosmos-458703-g3 \
             --platform managed \
