@@ -3,7 +3,7 @@ import json
 import base64
 import requests
 from google.cloud import pubsub_v1
-# lets do this again and again
+# lets do this again and again and again
 # ─── CONFIG ───
 PROJECT_ID    = "avian-cosmos-458703-g3"
 TOPIC_ID      = "Seminar-List-Automation"
