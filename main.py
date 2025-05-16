@@ -4,8 +4,10 @@ import json
 import base64
 import requests
 from google.cloud import pubsub_v1
+import functions_framework
+@functions_framework.http
 
-app = Flask(__name__)
+# app = Flask(__name__)
 
 # ─── CONFIG ───
 PROJECT_ID    = "avian-cosmos-458703-g3"
@@ -24,8 +26,8 @@ FORM_ID_TO_BRAND = {
     "681ea9e8939646b8df09df67": "JPI"
 }
 
-@app.route("/", methods=["POST"])
-def receive_and_publish():
+# @app.route("/", methods=["POST"])
+def receive_and_publish(request):
     if request.method != "POST":
         return ("Only POST allowed", 405)
 
@@ -69,5 +71,5 @@ def receive_and_publish():
     return ("Accepted", 202)
 
 # For local testing
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+# if __name__ == "__main__":
+    # app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
