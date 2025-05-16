@@ -1,4 +1,4 @@
-name: Deploy to Cloud Run
+name: Deploy to Cloud Functions
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy seminar-receiver
+    name: Deploy seminar-receiver as Cloud Function
     runs-on: ubuntu-latest
 
     steps:
@@ -19,15 +19,17 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
-      - name: Set up Google Cloud CLI
+      - name: Set up gcloud CLI
         uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: avian-cosmos-458703-g3
 
-      - name: Deploy to Cloud Run
+      - name: Deploy to Cloud Functions
         run: |
-          gcloud run deploy seminar-receiver \
-            --source . \
+          gcloud functions deploy receive_and_publish \
+            --runtime python311 \
+            --trigger-http \
+            --entry-point receive_and_publish \
+            --allow-unauthenticated \
             --region us-central1 \
-            --platform managed \
-            --allow-unauthenticated
+            --source .
