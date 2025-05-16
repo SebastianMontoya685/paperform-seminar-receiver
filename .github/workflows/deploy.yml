@@ -31,4 +31,3 @@ jobs:
             --platform managed \
             --allow-unauthenticated \
             --source . \
-            --entry-point app
