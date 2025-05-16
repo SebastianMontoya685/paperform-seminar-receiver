@@ -2,37 +2,28 @@ name: Deploy to Cloud Run
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   deploy:
-    name: Deploy seminar-receiver
     runs-on: ubuntu-latest
-
     steps:
-      # 1) grab your code
-      - name: Checkout source
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      # 2) auth with your service-account JSON
-      - name: Authenticate to Google Cloud
+      - name: Authenticate to GCP
         uses: google-github-actions/auth@v1
         with:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
-      # 3) install the gcloud CLI
-      - name: Set up gcloud CLI
-        uses: google-github-actions/setup-gcloud@v2
-        with:
-          project_id: avian-cosmos-458703-g3
+      - name: Build & push container
+        run: |
+          gcloud builds submit . \
+            --tag gcr.io/avian-cosmos-458703-g3/seminar-receiver
 
-      # 4) deploy from source, telling the buildpack to invoke your Functions Framework handler
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy seminar-receiver \
-            --source . \
+            --image gcr.io/avian-cosmos-458703-g3/seminar-receiver \
             --region us-central1 \
             --platform managed \
-            --allow-unauthenticated \
-            --set-env-vars=FUNCTION_TARGET=receive_and_publish,FUNCTION_SIGNATURE_TYPE=http
+            --allow-unauthenticated
