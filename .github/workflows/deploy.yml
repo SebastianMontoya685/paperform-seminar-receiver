@@ -1,4 +1,4 @@
-name: Deploy to Cloud Functions
+name: Deploy to Cloud Run
 
 on:
   push:
@@ -7,11 +7,11 @@ on:
 
 jobs:
   deploy:
-    name: Deploy seminar-receiver as Cloud Function
+    name: Deploy seminar-receiver
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source
+      - name: Checkout source code
         uses: actions/checkout@v3
 
       - name: Authenticate to Google Cloud
@@ -24,12 +24,13 @@ jobs:
         with:
           project_id: avian-cosmos-458703-g3
 
-      - name: Deploy to Cloud Functions
+      - name: Deploy to Cloud Run
         run: |
-          gcloud functions deploy receive_and_publish \
-            --runtime python311 \
-            --trigger-http \
+          gcloud run deploy seminar-receiver \
+            --source . \
             --entry-point receive_and_publish \
-            --allow-unauthenticated \
+            --runtime python311 \
             --region us-central1 \
-            --source .
+            --project avian-cosmos-458703-g3 \
+            --platform managed \
+            --allow-unauthenticated
