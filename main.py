@@ -5,7 +5,6 @@ import base64
 import requests
 from google.cloud import pubsub_v1
 import functions_framework
-@functions_framework.http
 
 # app = Flask(__name__)
 
@@ -27,6 +26,7 @@ FORM_ID_TO_BRAND = {
 }
 
 # @app.route("/", methods=["POST"])
+@functions_framework.http
 def receive_and_publish(request):
     if request.method != "POST":
         return ("Only POST allowed", 405)
